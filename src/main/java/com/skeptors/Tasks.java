@@ -7,14 +7,13 @@ import com.google.api.server.spi.response.NotFoundException;
 
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
  * Defines v1 of a helloworld API, which provides simple "greeting" methods.
  */
 @Api(
-        name = "tasks",
+        name = "todo",
         version = "v1",
         scopes = {Constants.EMAIL_SCOPE},
         clientIds = {Constants.WEB_CLIENT_ID, Constants.ANDROID_CLIENT_ID, Constants.IOS_CLIENT_ID},
@@ -24,41 +23,26 @@ import javax.servlet.http.HttpServletRequest;
 public class Tasks {
 
 
-    public HelloGreeting getHello(@Named("id") Integer id) throws NotFoundException {
-        try {
-            return greetings.get(id);
-        } catch (IndexOutOfBoundsException e) {
-            throw new NotFoundException("Greeting not found with an index: " + id);
-        }
+    public Task getTask(@Named("id") Long id) throws NotFoundException {
+        return new Task();
     }
 
-    @ApiMethod(name = "insertTask",httpMethod = "POST")
-    public Car insertTask(HttpServletRequest request){
-        Car car = new Car();
-        car.setName("benz");
+    @ApiMethod(httpMethod = "POST")
+    public Task insertTask() {
+        Task task = new Task();
+        task.setDescription("first");
         EntityManager em = EMF.get().createEntityManager();
-        try{
-            em.persist(car);
-        }finally {
+        try {
+            em.persist(task);
+        } finally {
             em.close();
         }
-//        ofy().save().entity(car).now();
-
-        return car;
-//        Task task = new Task();
-//        task.setText("some task");
-//        PersistenceManager persistenceManager = PMF.get().getPersistenceManager();
-//        try {
-//            persistenceManager.makePersistent(task);
-//        } finally {
-//            persistenceManager.close();
-//        }
-//        return task;
+        return task;
     }
-
-    public ArrayList<HelloGreeting> listGreeting() {
-        return greetings;
-    }
+//    public ArrayList
+// <HelloGreeting> listGreeting() {
+//        return greetings;
+//    }
 
 
 }
