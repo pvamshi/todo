@@ -8,24 +8,21 @@ import com.google.api.server.spi.response.NotFoundException;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 
-import static com.skeptors.OfyService.ofy;
 
 /**
  * Defines v1 of a helloworld API, which provides simple "greeting" methods.
  */
 @Api(
-        name = "hello",
+        name = "tasks",
         version = "v1",
         scopes = {Constants.EMAIL_SCOPE},
         clientIds = {Constants.WEB_CLIENT_ID, Constants.ANDROID_CLIENT_ID, Constants.IOS_CLIENT_ID},
         audiences = {Constants.ANDROID_AUDIENCE}
 )
-@ApiClass(resource = "hello")
-public class Hellos {
+@ApiClass(resource = "task")
+public class Tasks {
 
-    public static ArrayList<HelloGreeting> greetings = new ArrayList<HelloGreeting>();
 
     public HelloGreeting getHello(@Named("id") Integer id) throws NotFoundException {
         try {
