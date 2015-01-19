@@ -64,6 +64,7 @@ skeptors.todo.init = function(apiRoot){
                 console.log("Failed to load ");
             }
             $('#signinButton').on('click',skeptors.todo.auth.authorize);
+            $('#listTasksBtn').on('click',skeptors.todo.home.init(gapi.client.todo));
             //          google.devrel.samples.hello.enableButtons();
             //          google.devrel.samples.hello.signin(true,
             //          google.devrel.samples.hello.userAuthed);

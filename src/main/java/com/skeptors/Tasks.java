@@ -3,8 +3,13 @@ package com.skeptors;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiClass;
 import com.google.api.server.spi.config.ApiMethod;
+import com.google.api.server.spi.response.ForbiddenException;
 import com.google.api.server.spi.response.NotFoundException;
+import com.google.appengine.api.users.User;
+import com.skeptors.model.Task;
+import com.skeptors.service.TaskService;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -25,30 +30,32 @@ import java.util.List;
 @ApiClass(resource = "task")
 public class Tasks {
 
+    private TaskService taskService ;
 
+//    private TaskService getTaskService(){
+//        if(taskService == null){
+//            taskService = new TaskServiceImpl();
+//        }
+//        return taskService;
+//    }
     public Task getTask(@Named("id") Long id) throws NotFoundException {
         return new Task();
     }
 
     @ApiMethod(httpMethod = "POST")
-    public Task insertTask() {
-        Task task = new Task();
-        task.setDescription("first");
-        EntityManager em = EMF.get().createEntityManager();
-        try {
-            em.persist(task);
-        } finally {
-            em.close();
-        }
-        return task;
+    public Task insertTask(Task task) {
+        return taskService.saveTask(task);
     }
 
 
-    public List<Task> listTasks() {
+    public List<Task> listTasks(User user) throws ForbiddenException{
 
+        List<Task> taskList = new ArrayList<>();
+        if(user == null){
+            throw new ForbiddenException("user need to sign in");
+        }
         EntityManager entityManager = EMF.get().createEntityManager();
         Query query = entityManager.createQuery("SELECT t FROM " + Task.class.getName() + " t");
-        List<Task> taskList = new ArrayList<>();
         List resultList = query.getResultList();
         if (resultList != null) {
             for (Task t : (List<Task>) resultList) {
@@ -57,11 +64,10 @@ public class Tasks {
         }
         return taskList;
     }
-//    public ArrayList
-// <HelloGreeting> listGreeting() {
-//        return greetings;
-//    }
 
-
+    @Inject
+    public void setTaskService(TaskService taskService){
+        this.taskService =taskService;
+    }
 }
 
