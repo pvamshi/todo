@@ -24,6 +24,11 @@ public class TaskDAOImpl implements TaskDAO {
         return rawTask;
     }
 
+    @Override
+    public void printt() {
+        System.out.println("\n\n\n\n\n----------- ################## ------------\n\nn\n\n\n\n");
+    }
+
     private static EntityManager em(){
         return EMF.get().createEntityManager();
     }

@@ -7,4 +7,6 @@ import com.skeptors.model.Task;
  */
 public interface TaskDAO {
     Task createTask(Task rawTask);
+
+    void printt();
 }

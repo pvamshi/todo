@@ -6,8 +6,12 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.response.ForbiddenException;
 import com.google.api.server.spi.response.NotFoundException;
 import com.google.appengine.api.users.User;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.skeptors.model.Task;
 import com.skeptors.service.TaskService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,8 +32,10 @@ import java.util.List;
         audiences = {Constants.ANDROID_AUDIENCE}
 )
 @ApiClass(resource = "task")
+@Component
 public class Tasks {
 
+//    @Autowired
     private TaskService taskService ;
 
 //    private TaskService getTaskService(){
@@ -40,6 +46,15 @@ public class Tasks {
 //    }
     public Task getTask(@Named("id") Long id) throws NotFoundException {
         return new Task();
+    }
+
+    public Tasks(){
+        Injector injector = Guice.createInjector(new HeroModule());
+        Vehicle hero = injector.getInstance(Vehicle.class);
+        hero.prin();;
+        taskService = injector.getInstance(TaskService.class);
+        System.out.println("testss");
+        this.taskService.print();
     }
 
     @ApiMethod(httpMethod = "POST")
@@ -65,9 +80,9 @@ public class Tasks {
         return taskList;
     }
 
-    @Inject
-    public void setTaskService(TaskService taskService){
-        this.taskService =taskService;
-    }
+//    @Inject
+//    public void setTaskService(TaskService taskService){
+//        this.taskService =taskService;
+//    }
 }
 

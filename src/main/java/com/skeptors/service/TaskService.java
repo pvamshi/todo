@@ -7,4 +7,5 @@ import com.skeptors.model.Task;
  */
 public interface TaskService {
     Task saveTask(Task task);
+    void print();
 }

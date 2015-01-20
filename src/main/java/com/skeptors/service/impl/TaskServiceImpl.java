@@ -24,6 +24,11 @@ public class TaskServiceImpl implements TaskService {
         return taskDAO.createTask(task);
     }
 
+    @Override
+    public void print() {
+        this.taskDAO.printt();
+    }
+
     public TaskDAO getTaskDAO() {
         return taskDAO;
     }
