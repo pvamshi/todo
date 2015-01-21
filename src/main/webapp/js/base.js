@@ -2,6 +2,7 @@ var skeptors = skeptors || {};
 skeptors.todo = skeptors.todo || {} ;
 skeptors.todo.auth=skeptors.todo.auth || {};
 
+skeptors.todo.home.init();
 skeptors.todo.CLIENT_ID='318868172588-25cmbhejflvdc95ku4b3okg4a45akrhs.apps.googleusercontent.com';
 
 skeptors.todo.SCOPES='https://www.googleapis.com/auth/userinfo.email';
@@ -59,7 +60,7 @@ skeptors.todo.init = function(apiRoot){
         if (apisToLoad === 0) {
 
             if(skeptors.todo.home){
-                skeptors.todo.home.init(gapi.client.todo);
+                skeptors.todo.home.init();
             }else{
                 console.log("Failed to load ");
             }

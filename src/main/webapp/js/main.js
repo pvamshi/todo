@@ -10,17 +10,21 @@ skeptors.todo.home = {
             });
         }
     },
-    init: function(dao){
-        console.log("init executed");
-        skeptors.todo.home.tasks.loadTasks(dao.task,function(items){
-            if(items.length >0){
-                $("#tasklist").append("<ul></ul>");
-                for( var idx = 0 ; idx< items.length ; idx++){
-                    var liElem = "<li><a>"+items[idx].description+"</a></li>";
-                    $("#tasklist ul").append(liElem);
-                }
-            }
+    init: function(){
+        skeptors.todo.app = angular.module('todo',['ngRoute']);
+        skeptors.todo.app.controller('HomeController',function($scope){
+            $scope.name = 'Vamshi';
         });
-    },
+        skeptors.todo.app.config(function($routeProvider){
+            $routeProvider
+                .when("/",{
+                    templateUrl: "views/home.html",
+                    controller: "HomeController"
+                    })
+                .otherwise({
+                    redirectTo:"/"
+                })
+        });
+    }
 };
 
