@@ -15,9 +15,6 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
-    private Task parent;
-    private List<Task> children;
-
 
     public Long getId() {
         return id;
@@ -35,19 +32,4 @@ public class Task {
         this.description = description;
     }
 
-    public Task getParent() {
-        return parent;
-    }
-
-    public void setParent(Task parent) {
-        this.parent = parent;
-    }
-
-    public List<Task> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<Task> children) {
-        this.children = children;
-    }
 }

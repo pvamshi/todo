@@ -10,9 +10,6 @@ import com.skeptors.model.Task;
 import com.skeptors.service.TaskService;
 
 import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -34,7 +31,6 @@ public class Tasks {
     public Tasks(){
         Injector injector = Guice.createInjector(new TodoModule());
         taskService = injector.getInstance(TaskService.class);
-        taskService.print();
     }
 
     public Task getTask(@Named("id") Long id) throws NotFoundException {
@@ -46,20 +42,7 @@ public class Tasks {
     }
 
     public List<Task> listTasks() throws ForbiddenException{
-
-        List<Task> taskList = new ArrayList<>();
-//        if(user == null){
-//            throw new ForbiddenException("user need to sign in");
-//        }
-        EntityManager entityManager = EMF.get().createEntityManager();
-        Query query = entityManager.createQuery("SELECT t FROM " + Task.class.getName() + " t");
-        List resultList = query.getResultList();
-        if (resultList != null) {
-            for (Task t : (List<Task>) resultList) {
-                taskList.add(t);
-            }
-        }
-        return taskList;
+        return taskService.getTaskList();
     }
 
 }

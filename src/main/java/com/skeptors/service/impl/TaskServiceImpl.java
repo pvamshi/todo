@@ -5,6 +5,7 @@ import com.skeptors.model.Task;
 import com.skeptors.service.TaskService;
 
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * Created by vamshi on 1/14/15.
@@ -24,17 +25,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void print() {
-        this.taskDAO.printt();
+    public List<Task> getTaskList(){
+        return taskDAO.getTaskList();
     }
-
-    public TaskDAO getTaskDAO() {
-        return taskDAO;
-    }
-
-    public void setTaskDAO(TaskDAO taskDAO) {
-        this.taskDAO = taskDAO;
-    }
-
-
 }
