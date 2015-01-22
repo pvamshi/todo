@@ -2,6 +2,7 @@ package com.skeptors;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiClass;
+import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.response.ForbiddenException;
 import com.google.api.server.spi.response.NotFoundException;
 import com.google.inject.Guice;
@@ -26,23 +27,28 @@ import java.util.List;
 @ApiClass(resource = "task")
 public class Tasks {
 
-    private TaskService taskService ;
+    private TaskService taskService;
 
-    public Tasks(){
+    public Tasks() {
         Injector injector = Guice.createInjector(new TodoModule());
         taskService = injector.getInstance(TaskService.class);
     }
 
     public Task getTask(@Named("id") Long id) throws NotFoundException {
-        return new Task();
+        return taskService.getTask(id);
     }
 
-    public Task insertTask(Task task) {
+    public Task saveTask(Task task) {
         return taskService.saveTask(task);
     }
 
-    public List<Task> listTasks() throws ForbiddenException{
+    public List<Task> listTasks() throws ForbiddenException {
         return taskService.getTaskList();
+    }
+
+    @ApiMethod(httpMethod = ApiMethod.HttpMethod.DELETE)
+    public void removeTask(@Named("id") Long id){
+        taskService.deleteTask(id);
     }
 
 }

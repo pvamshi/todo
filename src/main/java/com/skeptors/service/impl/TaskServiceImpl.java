@@ -15,17 +15,27 @@ public class TaskServiceImpl implements TaskService {
     private TaskDAO taskDAO;
 
     @Inject
-    public TaskServiceImpl(TaskDAO taskDAO){
+    public TaskServiceImpl(TaskDAO taskDAO) {
         this.taskDAO = taskDAO;
     }
 
     @Override
     public Task saveTask(Task task) {
-        return taskDAO.createTask(task);
+        return taskDAO.saveTask(task);
     }
 
     @Override
-    public List<Task> getTaskList(){
+    public List<Task> getTaskList() {
         return taskDAO.getTaskList();
+    }
+
+    @Override
+    public Task getTask(Long id) {
+        return taskDAO.getTask(id);
+    }
+
+    @Override
+    public void deleteTask(Long id){
+        taskDAO.deleteTask(id);
     }
 }

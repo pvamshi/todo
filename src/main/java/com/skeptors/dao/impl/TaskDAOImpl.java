@@ -17,11 +17,11 @@ import java.util.List;
 public class TaskDAOImpl implements TaskDAO {
 
     @Override
-    public Task createTask(Task rawTask){
+    public Task saveTask(Task rawTask) {
         EntityManager em = em();
-        try{
+        try {
             em.persist(rawTask);
-        }finally {
+        } finally {
             em.close();
         }
         return rawTask;
@@ -34,17 +34,44 @@ public class TaskDAOImpl implements TaskDAO {
             throw new ForbiddenException("user need to sign in");
         }*/
         EntityManager entityManager = EMF.get().createEntityManager();
-        Query query = entityManager.createQuery("SELECT t FROM " + Task.class.getName() + " t");
-        List resultList = query.getResultList();
-        if (resultList != null) {
-            for (Task t : (List<Task>) resultList) {
-                taskList.add(t);
+        try {
+            Query query = entityManager.createQuery("SELECT t FROM " + Task.class.getName() + " t ");
+            List resultList = query.getResultList();
+            if (resultList != null) {
+                for (Task t : (List<Task>) resultList) {
+                    taskList.add(t);
+                }
             }
+        } finally {
+            entityManager.close();
         }
         return taskList;
     }
 
-    private static EntityManager em(){
+    @Override
+    public Task getTask(Long id) {
+        EntityManager em = em();
+        Task task;
+        try{
+            task = em.find(Task.class, id);
+        }finally {
+            em.close();
+        }
+        return task;
+    }
+
+    @Override
+    public void deleteTask(Long id) {
+        EntityManager em = em();
+        try {
+            Task taskToDelete = em.find(Task.class, id);
+            em.remove(taskToDelete);
+        } finally {
+            em.close();
+        }
+    }
+
+    private static EntityManager em() {
         return EMF.get().createEntityManager();
     }
 }
