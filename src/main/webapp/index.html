@@ -28,10 +28,13 @@
     </div>
 </div>
 <div class="container">
+    {{backendInitialized}}
     <div ng-view></div>
     <script type="text/javascript">
         function init() {
-            skeptors.todo.init('//' + window.location.host + '/_ah/api');
+            //skeptors.todo.init('//' + window.location.host + '/_ah/api');
+            console.log('init');
+            window.init('//' + window.location.host + '/_ah/api');
         }
     </script>
     <script src="https://apis.google.com/js/client.js?onload=init"></script>

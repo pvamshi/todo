@@ -2,7 +2,6 @@ var skeptors = skeptors || {};
 skeptors.todo = skeptors.todo || {} ;
 skeptors.todo.auth=skeptors.todo.auth || {};
 
-skeptors.todo.home.init();
 skeptors.todo.CLIENT_ID='318868172588-25cmbhejflvdc95ku4b3okg4a45akrhs.apps.googleusercontent.com';
 
 skeptors.todo.SCOPES='https://www.googleapis.com/auth/userinfo.email';
@@ -46,26 +45,27 @@ skeptors.todo.auth.authorize = function() {
 };
 
 
+//skeptors.todo.init
 
 /**
  * Initializes the application.
  * init function , called in index.html
  * @param {string} apiRoot Root of the API's path.
  */
-skeptors.todo.init = function(apiRoot){
+skeptors.todo.init2 = function(apiRoot){
     var apisToLoad;
     var callback = function() {
         //decrement apisToLoad , after all api are loaded, initialize the deligators
         apisToLoad = apisToLoad -1 ;
         if (apisToLoad === 0) {
-
-            if(skeptors.todo.home){
-                skeptors.todo.home.init();
-            }else{
-                console.log("Failed to load ");
-            }
-            $('#signinButton').on('click',skeptors.todo.auth.authorize);
-            $('#listTasksBtn').on('click',skeptors.todo.home.init(gapi.client.todo));
+            skeptors.todo.dbinit=true;
+            // if(skeptors.todo.home){
+            //     skeptors.todo.home.init();
+            // }else{
+            //     console.log("Failed to load ");
+            // }
+            // $('#signinButton').on('click',skeptors.todo.auth.authorize);
+            // $('#listTasksBtn').on('click',skeptors.todo.home.init(gapi.client.todo));
             //          google.devrel.samples.hello.enableButtons();
             //          google.devrel.samples.hello.signin(true,
             //          google.devrel.samples.hello.userAuthed);
