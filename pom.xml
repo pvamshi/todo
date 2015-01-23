@@ -206,7 +206,8 @@
                 <configuration>
                     <api>JPA</api>
                     <verbose>true</verbose>
-                    <mappingIncludes>**/entity/*.class</mappingIncludes>
+                    <enhancername>ASM</enhancername>
+                    <mappingincludes>**/model/*.class</mappingincludes>
                     <fork>false</fork>
                     <log4jConfiguration>${basedir}/log4j.properties</log4jConfiguration>
                 </configuration>

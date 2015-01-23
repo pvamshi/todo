@@ -1,6 +1,6 @@
 <div >
     <ul>
-        <li ng-repeat="task in tasks">{{task.description}}</li>
-        <li><input type="text" style="border:0px" ng-model="newTask"/> </li>
+        <li ng-repeat="task in tasks"><input type="text" class="task" value="{{task.description}}"/></li>
+        <li><input type="text" class="task" ng-model="newTask"/> </li>
     </ul>
 </div>

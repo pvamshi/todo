@@ -30,3 +30,10 @@ form {
     width: 90px;
     display: inline-block;
 }
+.task{
+    border: 0px ;
+    outline: none ;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
