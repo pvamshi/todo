@@ -132,6 +132,34 @@
         <!-- for hot reload of the web application-->
         <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
         <plugins>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.7</version>
+                    <executions>
+                        <execution>
+                            <id>copy-resources</id>
+                            <!-- here the phase you need -->
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>copy-resources</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${project.build.directory}/webapp</outputDirectory>
+                                <resources>
+                                    <resource>
+                                        <directory>src/main/webapp</directory>
+                                        <!--<filtering>true</filtering>-->
+                                        <includes>
+                                            <include>*.css</include>
+                                            <include>*.js</include>
+                                        </includes>
+                                    </resource>
+                                </resources>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
@@ -181,13 +209,13 @@
                 <configuration>
                     <enableJarClasses>false</enableJarClasses>
                     <!-- Comment in the below snippet to bind to all IPs instead of just localhost -->
-                    <!-- address>0.0.0.0</address>
-                    <port>8080</port -->
+                    <!--< address>0.0.0.0</address>-->
+                    <!--<port>8080</port >-->
                     <!-- Comment in the below snippet to enable local debugging with a remove debugger
                          like those included with Eclipse or IntelliJ -->
-                    <!-- jvmFlags>
+                    <jvmFlags>
                       <jvmFlag>-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n</jvmFlag>
-                    </jvmFlags -->
+                    </jvmFlags >
                 </configuration>
                 <executions>
                     <execution>

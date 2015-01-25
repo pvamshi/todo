@@ -1,6 +1,9 @@
+var abc="sdsd";
+console.log("ssssss");
+console.log("working");
+console.log("working again");
 var skeptors = skeptors || {};
 skeptors.todo = skeptors.todo || {};
-
 skeptors.todo.app = angular.module('todo',['ngRoute'])
 
 .run(['$window','$rootScope',function($window,$rootScope){
@@ -40,19 +43,83 @@ skeptors.todo.app = angular.module('todo',['ngRoute'])
 
 .controller('HomeController',['$scope','$window','TaskDB' ,'$rootScope',
                                 function($scope,$window,TaskDB,$rootScope){
-    $scope.newTask = 'Vamshi';
-    $scope.tasks = [];
-    $rootScope.backendInitialized = false;
-    $scope.$watch('backendInitialized',function(){
-        if($rootScope.backendInitialized){
-            TaskDB.getAllTasks(function(resp){
-                $scope.tasks= resp.items;
+//    $scope.newTask = 'Vamshi';
+//    $scope.tasks = [];
+//    $scope.$watch('backendInitialized',function(){
+//        if($rootScope.backendInitialized){
+//            TaskDB.getAllTasks(function(resp){
+//                $scope.tasks= resp.items;
+//                $scope.$digest();
+//            });
+//        }
+//    });
+}])
+.directive('tasks',function(TaskDB, $rootScope){
+    return{
+        templateUrl:"views/tasks.html",
+        link: function(scope,elem,attr){
+//            console.log(scope);
+            scope.$watch('backendInitialized', function(){
+                if($rootScope.backendInitialized){
+                    TaskDB.getAllTasks(function(resp){
+                        scope.tasks = resp.items;
+                        angular.forEach(scope.tasks,function(task){
+                            task.saved = true;
+                            console.log(task);
+                        });
+                        scope.$digest();
+                    });
+                }
+            });
+////            console.log(elem);
+////            elem.find('li  input').keypress(function (e) {
+////              if (e.which == 13) {
+////                  console.log("enter pressed");
+////                  scope.tasks.push({description:""});
+////                return false;    //<---- Add this line
+////              }
+////            });
+        },
+        controller: function($scope,$element){
+//            $scope.newTask = 'Vamshi';
+//            $scope.tasks = [];
+//            $rootScope.backendInitialized = false;
+//            $scope.$watch('backendInitialized',function(){
+//                if($rootScope.backendInitialized){
+//                    TaskDB.getAllTasks(function(resp){
+//                        $scope.tasks= resp.items;
+//                        $scope.$digest();
+//                    });
+//                }
+//            });
+            this.addTask = function(task){
+                if(task && !task.saved && task.description){
+                    TaskDB.saveTask(task,function(resp){
+                        console.log(resp);
+                        console.log("task saved");
+                    });
+                }
+                $scope.tasks.push({description:"",saved:false});
                 $scope.$digest();
+                $element.find('li input').last().focus();
+            }
+        }
+    };
+})
+.directive('taskItem',function(){
+    return {
+        templateUrl : 'views/task-item.html',
+        require: '^tasks',
+        link: function(scope,elem,attr, tasksCtrl){
+            elem.keypress(function (e) {
+              if (e.which == 13) {
+                  tasksCtrl.addTask(scope.task);
+                  return false;    //<---- Add this line
+              }
             });
         }
-    });
-}])
-
+    };
+})
 .config(function($routeProvider){
     $routeProvider
     .when("/",{

@@ -31,9 +31,9 @@ form {
     display: inline-block;
 }
 .task{
-    border: 0px ;
-    outline: none ;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
+    outline: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border:0px !important;
 }
