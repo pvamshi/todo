@@ -67,8 +67,8 @@ link: function(scope,elem,attr){
         _.each(scope.tasks, (function(task){
             if(!task.saved){
                 console.log('saving '+task.description);
+                task.saved = true;
                 TaskDB.saveTask(task,function(resp){
-                    task.saved = true;
                 });
             }
         }));
