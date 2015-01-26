@@ -54,6 +54,9 @@ link: function(scope,elem,attr){
         if($rootScope.backendInitialized){
             TaskDB.getAllTasks(function(resp){
                 scope.tasks = resp.items;
+                if(scope.tasks.length===0){
+                    scope.tasks.push({description:'write something ... ',saved:false});
+                }
                 angular.forEach(scope.tasks,function(task,i){
                     task.saved = true;
                     task.index = i;
