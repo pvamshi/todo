@@ -17,7 +17,7 @@ skeptors.todo.app = angular.module('todo',['ngRoute'])
             if (apisToLoad === 0) {
                 $rootScope.$apply(function(){
                     $rootScope.backendInitialized = true;
-                    $rootScope.$digest
+                    // $rootScope.$digest();
                 });
             }
         };
@@ -32,103 +32,101 @@ skeptors.todo.app = angular.module('todo',['ngRoute'])
         saveTask : function(task,callback){
             gapi.client.todo.task.saveTask(task).execute(callback);
         },
-        getTask : function(taskId, callback){
-            gapi.client.todo.task.getTask({id:taskId}).execute(callback);
-        },
-        getAllTasks : function(callback){
-            gapi.client.todo.task.listTasks().execute(callback);
-        }
-    };
+getTask : function(taskId, callback){
+    gapi.client.todo.task.getTask({id:taskId}).execute(callback);
+},
+getAllTasks : function(callback){
+    gapi.client.todo.task.listTasks().execute(callback);
+}
+};
 })
 
 .controller('HomeController',['$scope','$window','TaskDB' ,'$rootScope',
-                                function($scope,$window,TaskDB,$rootScope){
-//    $scope.newTask = 'Vamshi';
-//    $scope.tasks = [];
-//    $scope.$watch('backendInitialized',function(){
-//        if($rootScope.backendInitialized){
-//            TaskDB.getAllTasks(function(resp){
-//                $scope.tasks= resp.items;
-//                $scope.$digest();
-//            });
-//        }
-//    });
-}])
-.directive('tasks',function(TaskDB, $rootScope){
+        function($scope,$window,TaskDB,$rootScope){
+        }])
+
+.directive('tasks',function(TaskDB, $rootScope,$interval){
     return{
         templateUrl:"views/tasks.html",
-        link: function(scope,elem,attr){
-//            console.log(scope);
-            scope.$watch('backendInitialized', function(){
-                if($rootScope.backendInitialized){
-                    TaskDB.getAllTasks(function(resp){
-                        scope.tasks = resp.items;
-                        angular.forEach(scope.tasks,function(task){
-                            task.saved = true;
-                            console.log(task);
-                        });
-                        scope.$digest();
-                    });
-                }
+link: function(scope,elem,attr){
+    //            console.log(scope);
+    scope.$watch('backendInitialized', function(){
+        if($rootScope.backendInitialized){
+            TaskDB.getAllTasks(function(resp){
+                scope.tasks = resp.items;
+                angular.forEach(scope.tasks,function(task,i){
+                    task.saved = true;
+                    task.index = i;
+                });
+                scope.$digest();
             });
-////            console.log(elem);
-////            elem.find('li  input').keypress(function (e) {
-////              if (e.which == 13) {
-////                  console.log("enter pressed");
-////                  scope.tasks.push({description:""});
-////                return false;    //<---- Add this line
-////              }
-////            });
-        },
-        controller: function($scope,$element){
-//            $scope.newTask = 'Vamshi';
-//            $scope.tasks = [];
-//            $rootScope.backendInitialized = false;
-//            $scope.$watch('backendInitialized',function(){
-//                if($rootScope.backendInitialized){
-//                    TaskDB.getAllTasks(function(resp){
-//                        $scope.tasks= resp.items;
-//                        $scope.$digest();
-//                    });
-//                }
-//            });
-            this.addTask = function(task){
-                if(task && !task.saved && task.description){
-                    TaskDB.saveTask(task,function(resp){
-                        console.log(resp);
-                        console.log("task saved");
-                    });
-                }
-                $scope.tasks.push({description:"",saved:false});
-                $scope.$digest();
-                $element.find('li input').last().focus();
-            }
         }
-    };
+    });
+
+    $interval(function(){
+        _.each(scope.tasks, (function(task){
+            if(!task.saved){
+                console.log('saving '+task.description);
+                TaskDB.saveTask(task,function(resp){
+                    task.saved = true;
+                });
+            }
+        }));
+    },5000);
+},
+    controller: function($scope,$element){
+        this.addTask = function(task,idx){
+            console.log(idx);
+            $scope.tasks.splice(idx,0,task);
+            $scope.$digest();
+        };
+        this.goToTask = function(idx){
+            $element.find('li input')[idx].focus();
+        };
+
+    }
+};
 })
 .directive('taskItem',function(){
     return {
         templateUrl : 'views/task-item.html',
-        require: '^tasks',
-        link: function(scope,elem,attr, tasksCtrl){
-            elem.keypress(function (e) {
-              if (e.which == 13) {
-                  tasksCtrl.addTask(scope.task);
-                  return false;    //<---- Add this line
-              }
-            });
-        }
+    require: '^tasks',
+    link: function(scope,elem,attr, tasksCtrl){
+        var idx = 0;
+        attr.$observe('idx',function(){
+            console.log('idx changed'+attr.idx);
+        });
+        elem.keydown(function (e) {
+            var code = e.keyCode || e.which;
+            if (code == 13) {
+                console.log(attr);
+                tasksCtrl.addTask({description:"",saved:false},scope.$index+1);
+                tasksCtrl.goToTask(scope.$index+1);
+                return false;    //<---- Add this line
+            }else if(code === 40){
+                if(!scope.$last){
+                    tasksCtrl.goToTask(scope.$index+1);
+                }
+                return false;
+            }else if(code === 38){
+                if(!scope.$first){
+                    tasksCtrl.goToTask(scope.$index-1);
+                }
+                return false;
+            }
+        });
+    }
     };
 })
 .config(function($routeProvider){
     $routeProvider
     .when("/",{
         templateUrl: "views/home.html",
-        controller: "HomeController"
+    controller: "HomeController"
     })
-    .otherwise({
-        redirectTo:"/"
-    });
+.otherwise({
+    redirectTo:"/"
+});
 })
 
 
