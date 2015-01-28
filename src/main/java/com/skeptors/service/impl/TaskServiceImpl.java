@@ -5,6 +5,7 @@ import com.skeptors.model.Task;
 import com.skeptors.service.TaskService;
 
 import javax.inject.Inject;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,7 +27,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getTaskList() {
-        return taskDAO.getTaskList();
+        List<Task> taskList = taskDAO.getTaskList();
+        Collections.sort(taskList);
+        return taskList;
     }
 
     @Override

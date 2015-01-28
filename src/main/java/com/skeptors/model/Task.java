@@ -9,11 +9,20 @@ import javax.persistence.Id;
  * Created by vamshi on 9/1/15.
  */
 @Entity
-public class Task {
+public class Task implements Comparable<Task>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
+    private int index;
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
     public Long getId() {
         return id;
@@ -31,4 +40,8 @@ public class Task {
         this.description = description;
     }
 
+    @Override
+    public int compareTo(Task otherTask) {
+        return this.getIndex()-otherTask.getIndex();
+    }
 }

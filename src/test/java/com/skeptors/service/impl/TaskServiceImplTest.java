@@ -52,8 +52,10 @@ public class TaskServiceImplTest {
         List<Task> taskList = new ArrayList<Task>();
         Task task1 = new Task();
         task1.setDescription("desc1");
+        task1.setIndex(1);
         Task task2 = new Task();
         task2.setDescription("desc2");
+        task2.setIndex(2);
         taskList.add(task1);
         taskList.add(task2);
 
@@ -61,6 +63,8 @@ public class TaskServiceImplTest {
         List<Task> taskList1 = taskServiceToTest.getTaskList();
         assertNotNull(taskList1);
         assertEquals(2, taskList1.size());
+        assertEquals(taskList.get(0).getDescription(),"desc1");
+        assertEquals(taskList.get(1).getDescription(),"desc2");
 
     }
 

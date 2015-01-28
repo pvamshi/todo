@@ -50,12 +50,13 @@ getAllTasks : function(callback){
         templateUrl:"views/tasks.html",
 link: function(scope,elem,attr){
     //            console.log(scope);
+    scope.activeIndex = 0;
     scope.$watch('backendInitialized', function(){
         if($rootScope.backendInitialized){
             TaskDB.getAllTasks(function(resp){
                 scope.tasks = resp.items;
                 if(scope.tasks.length===0){
-                    scope.tasks.push({description:'write something ... ',saved:false});
+                    scope.tasks.push({description:'write something ... ',saved:false,index:0});
                 }
                 angular.forEach(scope.tasks,function(task,i){
                     task.saved = true;
@@ -67,10 +68,18 @@ link: function(scope,elem,attr){
     });
 
     $interval(function(){
-        _.each(scope.tasks, (function(task){
-            if(!task.saved){
+            console.log('s');
+        _.each(scope.tasks, (function(task, currentIndex){
+            if(!task.saved || task.index != currentIndex ){
+                //the current task that is being edited should not be saved
+                //it gives inconsistent results , creating new task 
+                if(scope.activeIndex == currentIndex){
+                    return;
+                }
                 console.log('saving '+task.description);
                 task.saved = true;
+                task.index = currentIndex;
+                console.log(task);
                 TaskDB.saveTask(task,function(resp){
                 });
             }
@@ -86,6 +95,9 @@ link: function(scope,elem,attr){
         this.goToTask = function(idx){
             $element.find('li input')[idx].focus();
         };
+        this.setActiveIndex = function(idx){
+            $scope.activeIndex = idx;
+        };
 
     }
 };
@@ -95,15 +107,19 @@ link: function(scope,elem,attr){
         templateUrl : 'views/task-item.html',
     require: '^tasks',
     link: function(scope,elem,attr, tasksCtrl){
-        var idx = 0;
-        attr.$observe('idx',function(){
-            console.log('idx changed'+attr.idx);
-        });
+        // var idx = 0;
+        // attr.$observe('idx',function(){
+        //     console.log('idx changed'+attr.idx);
+        // });
+        scope.focuss = function(){
+            console.log('focussed');
+            tasksCtrl.setActiveIndex(scope.$index);
+        };
         elem.keydown(function (e) {
             var code = e.keyCode || e.which;
             if (code == 13) {
                 console.log(attr);
-                tasksCtrl.addTask({description:"",saved:false},scope.$index+1);
+                tasksCtrl.addTask({description:"",saved:false, index : 0},scope.$index+1);
                 tasksCtrl.goToTask(scope.$index+1);
                 return false;    //<---- Add this line
             }else if(code === 40){
