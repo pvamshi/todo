@@ -10,6 +10,7 @@ skeptors.todo.app = angular.module('todo',['ngRoute'])
     $rootScope.backendInitialized =false;
     $window.init = function(apiRoot){
         console.log('window init called ');
+        var backlog = [];//store all unattended tasks here
         var apisToLoad;
         var callback = function() {
             //decrement apisToLoad , after all api are loaded, initialize the deligators
@@ -35,9 +36,11 @@ skeptors.todo.app = angular.module('todo',['ngRoute'])
 getTask : function(taskId, callback){
     gapi.client.todo.task.getTask({id:taskId}).execute(callback);
 },
+
 getAllTasks : function(callback){
     gapi.client.todo.task.listTasks().execute(callback);
 }
+
 };
 })
 
