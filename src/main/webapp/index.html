@@ -2,37 +2,93 @@
 <html>
 
 <head>
-    <title>Hello Endpoints!</title>
+    <title>Tasks</title>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.11/angular.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.11/angular-route.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
     <script type="text/javascript" src="/js/main.js"></script>
     <script type="text/javascript" src="/js/base.js"></script>
-    <link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.min.css">
+    <!-- <link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter&#45;bootstrap/3.3.2/css/bootstrap.min.css"> -->
     <!-- <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap&#45;responsive.css"> -->
     <link type="text/css" rel="stylesheet" href="/css/style.css">
 </head>
 
 <body ng-app="todo">
-    <!--<div class="navbar navbar-inverse navbar-fixed-top">-->
-    <!--<div class="navbar-inner">-->
-    <!--<div class="container">-->
-    <!--<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">-->
-    <!--<span class="icon-bar"></span>-->
-    <!--<span class="icon-bar"></span>-->
-    <!--<span class="icon-bar"></span>-->
-    <!--</button>-->
-    <!--<a class="brand" href="#">todo</a>-->
-    <!--<div class="nav-collapse collapse pull-right">-->
-    <!--<a href="javascript:void(0);" class="btn" id="signinButton">Sign in</a>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <div class="container"> 
-        <span ng-hide="backendInitialized" ><i class="color-eee fa  fa-circle-o-notch fa-spin fa-5x"></i></span>
+    <!-- Static navbar -->
+    <!-- <nav class="navbar navbar&#45;default"> -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">do the tasks!</a>
+            </div>
+            <!-- <div id="navbar" class="navbar&#45;collapse collapse"> -->
+            <!--   <ul class="nav navbar&#45;nav"> -->
+            <!--     <li class="active"><a href="#">Home</a></li> -->
+            <!--     <li><a href="#">About</a></li> -->
+            <!--     <li><a href="#">Contact</a></li> -->
+            <!--     <li class="dropdown"> -->
+            <!--       <a href="#" class="dropdown&#45;toggle" data&#45;toggle="dropdown" role="button"  -->
+            <!--                   aria&#45;expanded="false">Dropdown <span class="caret"></span></a> -->
+            <!--       <ul class="dropdown&#45;menu" role="menu"> -->
+            <!--         <li><a href="#">Action</a></li> -->
+            <!--         <li><a href="#">Another action</a></li> -->
+            <!--         <li><a href="#">Something else here</a></li> -->
+            <!--         <li class="divider"></li> -->
+            <!--         <li class="dropdown&#45;header">Nav header</li> -->
+            <!--         <li><a href="#">Separated link</a></li> -->
+            <!--         <li><a href="#">One more separated link</a></li> -->
+            <!--       </ul> -->
+            <!--     </li> -->
+            <!--   </ul> -->
+            <!-- <ul class="nav navbar&#45;nav navbar&#45;right"> -->
+            <!--   <li class="active"><a href="./">Default <span class="sr&#45;only">(current)</span></a></li> -->
+            <!--   <li><a href="../navbar&#45;static&#45;top/">Static top</a></li> -->
+            <!--   <li><a href="../navbar&#45;fixed&#45;top/">Fixed top</a></li> -->
+            <!-- </ul> -->
+            <form class="navbar-form navbar-right" role="search">
+                <!-- <div class="form&#45;group"> -->
+                <!--     <input type="text" class="form&#45;control" placeholder="Search"> -->
+                <!-- </div> -->
+                <button type="button" class="btn btn-default">Sign In</button>
+            </form>
+        </div>
+        <!--/.nav-collapse -->
+        <!--/.container-fluid -->
+    </nav>
+
+    <!-- <div class="navbar navbar&#45;fixed&#45;top"> -->
+    <!--     <div class="container"> -->
+    <!--         <div class="navbar&#45;header"> -->
+    <!--             <button type="button" class="btn btn&#45;navbar" data&#45;toggle="collapse" data&#45;target=".nav&#45;collapse"> -->
+    <!--                 <span class="icon&#45;bar"></span> -->
+    <!--                 <span class="icon&#45;bar"></span> -->
+    <!--                 <span class="icon&#45;bar"></span> -->
+    <!--             </button> -->
+    <!--             <a class="navbar&#45;brand" href="#">do the tasks !!</a> -->
+    <!--             <div class="nav&#45;collapse collapse pull&#45;right"> -->
+    <!--                 <a href="javascript:void(0);" class="btn" id="signinButton">Sign in</a> -->
+    <!--             </div> -->
+    <!--         </div> -->
+    <!--     </div> -->
+    <!-- </div> -->
+    <div class="container">
+        <span ng-hide="backendInitialized"><i class="color-eee fa  fa-circle-o-notch fa-spin fa-5x"></i></span>
         <div ng-view></div>
         <script type="text/javascript">
             function init()

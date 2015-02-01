@@ -41,6 +41,13 @@ skeptors.todo.app = angular.module('todo', ['ngRoute'])
         },
         getAllTasks: function(callback) {
             gapi.client.todo.task.listTasks().execute(callback);
+        },
+        removeTask: function(task, callback) {
+            if (task.id) {
+                gapi.client.todo.task.removeTask({
+                    id: task.id
+                }).execute(callback);
+            }
         }
     };
 })
@@ -55,6 +62,7 @@ skeptors.todo.app = angular.module('todo', ['ngRoute'])
         link: function(scope, elem, attr) {
             //            console.log(scope);
             scope.activeIndex = 0;
+            scope.deletedTasks = [];
             scope.$watch('backendInitialized', function() {
                 if ($rootScope.backendInitialized) {
                     TaskDB.getAllTasks(function(resp) {
@@ -65,6 +73,7 @@ skeptors.todo.app = angular.module('todo', ['ngRoute'])
                                 saved: false,
                                 index: 0
                             });
+                            // scope.$digest();
                         }
                         angular.forEach(scope.tasks, function(task, i) {
                             task.saved = true;
@@ -81,19 +90,24 @@ skeptors.todo.app = angular.module('todo', ['ngRoute'])
                     _.each(scope.tasks, (function(task, currentIndex) {
                         if (!task.saved || task.index != currentIndex) {
                             //the current task that is being edited should not be saved
-                            //it gives inconsistent results , creating new task 
+                            //it gives inconsistent results , creating new task
                             console.log('saving ' + task.description);
                             task.saved = true;
                             task.index = currentIndex;
                             console.log(task);
                             TaskDB.saveTask(task, function(resp) {
                                 console.log(task);
-                                if(!scope.tasks[currentIndex].id){
+                                if (!scope.tasks[currentIndex].id) {
                                     scope.tasks[currentIndex].id = resp.id;
                                 }
                             });
                         }
                     }));
+                    while (scope.deletedTasks.length !== 0) {
+                        var task = scope.deletedTasks.pop();
+                        console.log('Deleting ' + task[0].id);
+                        TaskDB.removeTask(task[0]);
+                    }
                 }, 5000);
         },
         controller: function($scope, $element) {
@@ -110,6 +124,12 @@ skeptors.todo.app = angular.module('todo', ['ngRoute'])
             };
             this.setLastModified = function(idx, datetime) {
                 $scope.tasks[idx].lastModified = datetime;
+            };
+            this.removeTask = function(idx) {
+                this.goToTask(idx - 1);
+                var taskToDelete = $scope.tasks.splice(idx, 1);
+                $scope.$digest();
+                $scope.deletedTasks.push(taskToDelete);
             };
 
         }
@@ -152,6 +172,12 @@ skeptors.todo.app = angular.module('todo', ['ngRoute'])
                             tasksCtrl.goToTask(scope.$index - 1);
                         }
                         return false;
+                    } else if (code == 8) {
+                        if (!scope.task.description) {
+                            tasksCtrl.removeTask(scope.$index);
+                            return false;
+                        }
+                        return true;
                     }
                 });
             }
