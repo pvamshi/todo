@@ -6,23 +6,7 @@ var skeptors = skeptors || {};
 skeptors.todo = skeptors.todo || {};
 skeptors.todo.app = angular.module('todo', ['ngRoute'])
 
-<<<<<<< HEAD
-.run(['$window','$rootScope',function($window,$rootScope){
-    $rootScope.backendInitialized =false;
-    $window.init = function(apiRoot){
-        console.log('window init called ');
-        var backlog = [];//store all unattended tasks here
-        var apisToLoad;
-        var callback = function() {
-            //decrement apisToLoad , after all api are loaded, initialize the deligators
-            apisToLoad = apisToLoad -1 ;
-            if (apisToLoad === 0) {
-                $rootScope.$apply(function(){
-                    $rootScope.backendInitialized = true;
-                    // $rootScope.$digest();
-                });
-            }
-=======
+
 .run(['$window', '$rootScope',
     function($window, $rootScope) {
         $rootScope.backendInitialized = false;
@@ -42,7 +26,7 @@ skeptors.todo.app = angular.module('todo', ['ngRoute'])
             apisToLoad = 2; // must match number of calls to gapi.client.load()
             gapi.client.load('todo', 'v1', callback, apiRoot);
             gapi.client.load('oauth2', 'v2', callback);
->>>>>>> 77fe0413263b074ce3c7cda8f56cf441962f9436
+
         };
     }
 ])
@@ -52,17 +36,7 @@ skeptors.todo.app = angular.module('todo', ['ngRoute'])
         saveTask: function(task, callback) {
             gapi.client.todo.task.saveTask(task).execute(callback);
         },
-<<<<<<< HEAD
-getTask : function(taskId, callback){
-    gapi.client.todo.task.getTask({id:taskId}).execute(callback);
-},
 
-getAllTasks : function(callback){
-    gapi.client.todo.task.listTasks().execute(callback);
-}
-
-};
-=======
         getTask: function(taskId, callback) {
             gapi.client.todo.task.getTask({
                 id: taskId
@@ -72,7 +46,7 @@ getAllTasks : function(callback){
             gapi.client.todo.task.listTasks().execute(callback);
         }
     };
->>>>>>> 77fe0413263b074ce3c7cda8f56cf441962f9436
+
 })
 
 .controller('HomeController', ['$scope', '$window', 'TaskDB', '$rootScope',
