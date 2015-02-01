@@ -6,6 +6,7 @@ var skeptors = skeptors || {};
 skeptors.todo = skeptors.todo || {};
 skeptors.todo.app = angular.module('todo', ['ngRoute'])
 
+
 .run(['$window', '$rootScope',
     function($window, $rootScope) {
         $rootScope.backendInitialized = false;
@@ -25,6 +26,7 @@ skeptors.todo.app = angular.module('todo', ['ngRoute'])
             apisToLoad = 2; // must match number of calls to gapi.client.load()
             gapi.client.load('todo', 'v1', callback, apiRoot);
             gapi.client.load('oauth2', 'v2', callback);
+
         };
     }
 ])
@@ -34,6 +36,7 @@ skeptors.todo.app = angular.module('todo', ['ngRoute'])
         saveTask: function(task, callback) {
             gapi.client.todo.task.saveTask(task).execute(callback);
         },
+
         getTask: function(taskId, callback) {
             gapi.client.todo.task.getTask({
                 id: taskId
@@ -50,6 +53,7 @@ skeptors.todo.app = angular.module('todo', ['ngRoute'])
             }
         }
     };
+
 })
 
 .controller('HomeController', ['$scope', '$window', 'TaskDB', '$rootScope',
