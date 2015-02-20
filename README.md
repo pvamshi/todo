@@ -1,7 +1,8 @@
-appengine-endpoints-helloendpoints-java-maven
+TODO
 =============================================
 
-A "hello world" application for Google Cloud Endpoints in Java.
+A todo application with java as backend 
+(very very early stage) 
 
 - [App Engine][1]
 
